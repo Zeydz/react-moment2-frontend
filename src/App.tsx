@@ -1,34 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { TodoList } from "./components/TodoList";
+import './App.css';
+import type { Todo } from "./types/Todo";
+
+
+const mockTodos: Todo[] = [
+    {
+        _id: "1",
+        title: "Lära mig MongoDB",
+        description: "Förstå schemas och models",
+        status: "Pågående",
+        createdAt: "",
+        updatedAt: "",
+    },
+    {
+        _id: "2",
+        title: "Bygga UI",
+        status: "Ej påbörjad",
+        createdAt: "",
+        updatedAt: "",
+    },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs text-center">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <main className="max-w-xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Todos</h1>
+      <TodoList todos={mockTodos}/>
+    </main>
   )
 }
 
