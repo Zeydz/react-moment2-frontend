@@ -9,19 +9,46 @@ import { getTodos, createTodo } from "./services/todoService";
 function App() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch todos on component mount
   useEffect(() => {
     const fetchTodos = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
         const data = await getTodos();
         setTodos(data);
       } catch (error) {
         console.error("Kunde inte hämta todos:", error);
+        setError("Kunde inte hämta todos. Kontrollera att backend körs.")
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchTodos();
   }, []);
+
+  // Display loading state
+  if (isLoading) {
+    return (
+      <main className="max-w-xl mx-auto p-6">
+        <p className="text-gray-500 text-center">Laddar todos...</p>
+      </main>
+    );
+  }
+
+  // Display error message if any
+  if (error) {
+    return(
+      <main className="max-w-xl mx-auto p-6">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error} 
+        </div>
+      </main>
+    );
+  }
 
   // Handle creation of a new todo
   const handleCreate = async (newTodo: NewToDo) => {
