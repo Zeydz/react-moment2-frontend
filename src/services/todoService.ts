@@ -43,13 +43,13 @@ export const createTodo = async (todo: NewToDo): Promise<Todo> => {
 };
 
 // PUT/PATCH a todo
-export const updateTodo = async (todo: Todo): Promise<Todo> => {
-    const response = await fetch(`${API_URL}/${todo._id}`, {
+export const updateTodo = async (id: string, updatedData: Partial<NewToDo>) => {
+    const response = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(todo),
+        body: JSON.stringify(updatedData),
     });
 
     if(!response.ok) {
