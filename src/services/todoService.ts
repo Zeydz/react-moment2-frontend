@@ -41,3 +41,31 @@ export const createTodo = async (todo: NewToDo): Promise<Todo> => {
 
     return response.json();
 };
+
+// PUT/PATCH a todo
+export const updateTodo = async (todo: Todo): Promise<Todo> => {
+    const response = await fetch(`${API_URL}/${todo._id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todo),
+    });
+
+    if(!response.ok) {
+        throw new Error('Failed to update todo')
+    };
+
+    return response.json();
+}
+
+// DELETE a todo
+export const deleteTodo = async (id: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+    });
+
+    if(!response.ok) {
+        throw new Error('Failed to delete todo');
+    }
+};
