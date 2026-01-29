@@ -3,7 +3,7 @@ import './App.css';
 import { TodoForm } from "./components/TodoForm";
 import type { Todo, NewToDo } from "./types/Todo";
 import { useEffect, useState } from "react";
-import { getTodos, createTodo } from "./services/todoService";
+import { getTodos, createTodo, updateTodo } from "./services/todoService";
 
 
 function App() {
@@ -49,6 +49,19 @@ function App() {
       </main>
     );
   }
+  
+  const handleUpdate = async (id: string, updatedData: Partial<NewToDo>) => {
+    try {
+      const updatedTodo = await updateTodo(id, updatedData);
+
+      // Update state with the updated todo
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) => (todo._id === id ? updatedTodo : todo))
+      );
+    } catch (error) {
+      console.error("Kunde inte uppdatera todo:", error);
+    }
+  }
 
   // Handle creation of a new todo
   const handleCreate = async (newTodo: NewToDo) => {
@@ -66,7 +79,7 @@ function App() {
     <main className="max-w-xl mx-auto p-6">
       <TodoForm onCreate={handleCreate} />
       <h1 className="text-2xl font-bold mb-6">Todos</h1>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} onUpdate={handleUpdate} />
     </main>
   )
 }
