@@ -103,7 +103,7 @@ export const TodoForm = ({ onCreate }: TodoFormProps) => {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded"
+          className="w-full rounded border p-3"
           placeholder="Skriv en titel..."
           disabled={isLoading}
         />
@@ -121,7 +121,7 @@ export const TodoForm = ({ onCreate }: TodoFormProps) => {
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded"
+          className="w-full rounded border p-3"
           placeholder="Skriv en beskrivning..."
           disabled={isLoading}
         ></textarea>
@@ -140,7 +140,7 @@ export const TodoForm = ({ onCreate }: TodoFormProps) => {
           id="status"
           value={status}
           onChange={(e) => setStatus(e.target.value as NewToDo["status"])}
-          className="w-full rounded"
+          className="w-full rounded border p-3"
           disabled={isLoading}
         >
           <option value="Ej påbörjad">Ej påbörjad</option>
