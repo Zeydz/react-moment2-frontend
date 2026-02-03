@@ -1,7 +1,7 @@
 import type { Todo, NewToDo } from "../types/Todo";
 
 
-const API_URL = "http://localhost:5001/api/todos";
+const API_URL = "https://react-moment2-backend.onrender.com/api/todos";
 
 // GET all todos
 export const getTodos = async (): Promise<Todo[]> => {
