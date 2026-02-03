@@ -4,9 +4,10 @@ import { TodoItem } from "./TodoItem";
 interface TodoListProps {
   todos: Todo[];
   onUpdate: (id: string, updatedData: Partial<Todo>) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
 }
 // Renders a list of todos or a message if there are none. Uses the TodoItem component to render each todo.
-export const TodoList = ({ todos, onUpdate }: TodoListProps) => {
+export const TodoList = ({ todos, onUpdate, onDelete }: TodoListProps) => {
   if (todos.length === 0) {
     return <p className="text-gray-500">Inga todos ännu.</p>;
   }
@@ -15,7 +16,7 @@ export const TodoList = ({ todos, onUpdate }: TodoListProps) => {
     <ul className="space-y-3">
       {/* Render each todo item with map-loop. Apply a key to each item */}
       {todos.map((todo) => (
-        <TodoItem key={todo._id} todo={todo} onUpdate={onUpdate} />
+        <TodoItem key={todo._id} todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
       ))}
     </ul>
   );

@@ -3,6 +3,7 @@ import type { Todo, NewToDo } from "../types/Todo";
 interface TodoItemProps {
   todo: Todo;
   onUpdate: (id: string, data: Partial<NewToDo>) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
 }
 
 const statusColor: Record<Todo["status"], string> = {
@@ -11,18 +12,32 @@ const statusColor: Record<Todo["status"], string> = {
   "Avslutad": "bg-green-200 text-green-800",
 };
 
-export const TodoItem = ({ todo, onUpdate }: TodoItemProps) => {
-  
+export const TodoItem = ({ todo, onUpdate, onDelete }: TodoItemProps) => {
   // Function to handle status change on click
   const handleStatusChange = () => {
-    const statusOrder: Todo["status"][] = ["Ej påbörjad", "Pågående", "Avslutad"];
+    const statusOrder: Todo["status"][] = [
+      "Ej påbörjad",
+      "Pågående",
+      "Avslutad",
+    ];
     console.log(statusOrder);
     // Determine the next status in the cycle. Found it here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
     const currentIndex = statusOrder.indexOf(todo.status);
     const nextIndex = (currentIndex + 1) % statusOrder.length;
     const nextStatus = statusOrder[nextIndex];
-    
+
     onUpdate(todo._id, { status: nextStatus });
+  };
+
+  // Function to handle delete
+  const handleDelete = () => {
+    if (
+      window.confirm(
+        `Är du säker på att du vill ta bort todo: "${todo.title}"?`,
+      )
+    ) {
+      onDelete(todo._id);
+    }
   };
 
   return (
@@ -38,9 +53,17 @@ export const TodoItem = ({ todo, onUpdate }: TodoItemProps) => {
         {/* Status badge, click to change status */}
         <button
           onClick={handleStatusChange}
-          className={`px-3 py-1 text-sm rounded-full ${statusColor[todo.status]} hover:opacity-80 transition`}
+          className={`px-3 py-1 text-sm rounded-full ${statusColor[todo.status]} hover:opacity-80 transition cursor-pointer`}
         >
           {todo.status}
+        </button>
+        {/* Delete button */}
+        <button
+          onClick={handleDelete}
+          className="text-red-500 hover:text-red-700 transition cursor-pointer w-5 h-5 border rounded-full flex items-center justify-center"
+          title="Ta bort todo"
+        >
+          ✕
         </button>
       </div>
     </li>

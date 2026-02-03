@@ -1,13 +1,16 @@
 import { TodoList } from "./components/TodoList";
-import './App.css';
+import "./App.css";
 import { TodoForm } from "./components/TodoForm";
 import type { Todo, NewToDo } from "./types/Todo";
 import { useEffect, useState } from "react";
-import { getTodos, createTodo, updateTodo } from "./services/todoService";
-
+import {
+  getTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} from "./services/todoService";
 
 function App() {
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +25,7 @@ function App() {
         setTodos(data);
       } catch (error) {
         console.error("Kunde inte hämta todos:", error);
-        setError("Kunde inte hämta todos. Kontrollera att backend körs.")
+        setError("Kunde inte hämta todos. Kontrollera att backend körs.");
       } finally {
         setIsLoading(false);
       }
@@ -41,27 +44,27 @@ function App() {
 
   // Display error message if any
   if (error) {
-    return(
+    return (
       <main className="max-w-xl mx-auto p-6">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error} 
+          {error}
         </div>
       </main>
     );
   }
-  
+
   const handleUpdate = async (id: string, updatedData: Partial<NewToDo>) => {
     try {
       const updatedTodo = await updateTodo(id, updatedData);
 
       // Update state with the updated todo
       setTodos((prevTodos) =>
-        prevTodos.map((todo) => (todo._id === id ? updatedTodo : todo))
+        prevTodos.map((todo) => (todo._id === id ? updatedTodo : todo)),
       );
     } catch (error) {
       console.error("Kunde inte uppdatera todo:", error);
     }
-  }
+  };
 
   // Handle creation of a new todo
   const handleCreate = async (newTodo: NewToDo) => {
@@ -71,17 +74,30 @@ function App() {
       setTodos((prevTodos) => [...prevTodos, createdTodo]);
     } catch (error) {
       console.error("Kunde inte skapa todo:", error);
-      throw error;
     }
-  }
+  };
+
+  // Handle deletion of a todo
+  const handleDelete = async (id: string) => {
+    try {
+      
+      await deleteTodo(id);
+      // Update state by removing the deleted todo
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+      
+    } catch (error) {
+      console.error("Kunde inte ta bort todo:", error);
+    }
+  };
+
   // Render the main application UI.
   return (
     <main className="max-w-xl mx-auto p-6">
       <TodoForm onCreate={handleCreate} />
       <h1 className="text-2xl font-bold mb-6">Todos</h1>
-      <TodoList todos={todos} onUpdate={handleUpdate} />
+      <TodoList todos={todos} onUpdate={handleUpdate} onDelete={handleDelete} />
     </main>
-  )
+  );
 }
 
-export default App
+export default App;
